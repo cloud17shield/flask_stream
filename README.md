@@ -14,6 +14,8 @@ This was done with homebrew on Mac using the latest versions of Kafka and Zookee
 ##### PIP packages installed
 pip install Flask
 
+pip install kafka-python
+
 ##### Home Brew packages installed
 brew install kafka
 
