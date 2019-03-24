@@ -14,6 +14,7 @@ pip install Flask
 
 ##### Home Brew packages installed
 brew install kafka
+
 brew install zookeeper
 
 **Step 2: create directory for the files or clone this repo**
