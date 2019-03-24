@@ -41,6 +41,7 @@ Navigate to 0.0.0.0:5000 in your browser.
 Should see Hipsum Kafka Stream Data: header
 
 **Step 6: start producer to send data**
+
 In another terminal whie in the Kafka directory created above, run producer.py
 can be run a few times to see another group of text being rendered on the Flask site.
 
