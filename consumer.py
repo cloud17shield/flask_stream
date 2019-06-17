@@ -25,13 +25,21 @@ app = Flask(__name__)
 def index():
     # return a multipart response
 
-    return Response(kafka_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(threadClass, mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+class threadClass:
+    def __init__(self):
+        p = threading.Thread(socket_streaming())
+        p.daemon = True
+        p.start()
+
+    def run(self):
+        kafka_stream()
 
 
 def kafka_stream():
-    p = threading.Thread(socket_streaming())
-    p.daemon = True
-    p.start()
+
     for msg in consumer:
         print('start playing...')
         print(len(msg), len(msg.value))
