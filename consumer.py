@@ -65,8 +65,9 @@ def socket_streaming():
 
 if __name__ == '__main__':
     app.run(host="10.244.1.12", debug=True, port=54321)
-    try:
-        # _thread.start_new_thread(app.run(host="10.244.1.12", debug=True, port=54321), ('Thread1', 100,))
-        _thread.start_new_thread(socket_streaming(), ('Thread2', 100,))
-    except Exception as e:
-        print("socket error", str(e))
+    socket_streaming()
+    # try:
+    #     # _thread.start_new_thread(app.run(host="10.244.1.12", debug=True, port=54321), ('Thread1', 100,))
+    #     _thread.start_new_thread(socket_streaming(), ('Thread2', 100,))
+    # except Exception as e:
+    #     print("socket error", str(e))
