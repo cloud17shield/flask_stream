@@ -25,7 +25,7 @@ app = Flask(__name__)
 def index():
     # return a multipart response
 
-    return Response(threadClass, mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(threadClass(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 class threadClass:
