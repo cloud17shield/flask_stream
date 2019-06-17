@@ -3,7 +3,6 @@ from kafka import KafkaConsumer
 import socket
 import struct
 import io
-import logging
 from kafka import KafkaProducer
 import time
 import _thread
@@ -61,7 +60,7 @@ def socket_streaming():
             producer.flush()
 
     except Exception as e:
-        logging.warning('errror streaming client %s: %s', str(e))
+        print('error streaming client', str(e))
 
 
 if __name__ == '__main__':
