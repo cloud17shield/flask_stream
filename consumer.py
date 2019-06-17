@@ -67,4 +67,4 @@ def socket_streaming():
 
 
 if __name__ == '__main__':
-    app.run(host="10.244.1.12", debug=True, port=54321)
+    app.run(host="10.244.1.12", debug=True, port=54321, threaded=True)
