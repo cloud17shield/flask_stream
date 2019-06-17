@@ -24,18 +24,11 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # return a multipart response
-    return Response(con_jou(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-def con_jou():
-    try:
-        _thread.start_new_thread(socket_streaming(), ('Thread1', 100,))
-        _thread.start_new_thread(kafka_stream(), ('Thread2', 100,))
-    except Exception as e:
-        print("socket error", str(e))
+    return Response(kafka_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 def kafka_stream():
+    socket_streaming()
     for msg in consumer:
         print('start playing...')
         print(len(msg), len(msg.value))
@@ -44,7 +37,7 @@ def kafka_stream():
                b'Content-Type: image/jpeg\r\n\r\n' + msg.value + b'\r\n\r\n')
 
 
-def socket_streaming():
+async def socket_streaming():
     server_socket = socket.socket()
     # 绑定socket通信端口
     server_socket.bind(('10.244.1.12', 23333))
