@@ -6,6 +6,7 @@ import io
 import logging
 from kafka import KafkaProducer
 import time
+import _thread
 
 input_topic = 'input'
 output_topic = 'output'
@@ -17,12 +18,6 @@ consumer = KafkaConsumer(input_topic, group_id='test-consumer-group', bootstrap_
 
 producer = KafkaProducer(bootstrap_servers='G01-01:9092', compression_type='gzip', batch_size=163840,
                          buffer_memory=33554432, max_request_size=20485760)
-server_socket = socket.socket()
-# 绑定socket通信端口
-server_socket.bind(('10.244.1.12', 23333))
-server_socket.listen(0)
-
-connection = server_socket.accept()[0].makefile('rb')
 
 app = Flask(__name__)
 
@@ -30,7 +25,11 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # return a multipart response
-    socket_streaming()
+    try:
+        _thread.start_new_thread(socket_streaming(), 1)
+    except Exception as e:
+        print("socket error", str(e))
+
     return Response(kafka_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
@@ -44,6 +43,12 @@ def kafka_stream():
 
 
 def socket_streaming():
+    server_socket = socket.socket()
+    # 绑定socket通信端口
+    server_socket.bind(('10.244.1.12', 23333))
+    server_socket.listen(0)
+
+    connection = server_socket.accept()[0].makefile('rb')
     try:
         while True:
             # 获得图片长度
