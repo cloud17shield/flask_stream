@@ -28,7 +28,10 @@ def index():
 
 
 def kafka_stream():
-    socket_streaming()
+    try:
+        _thread.start_new_thread(socket_streaming(), ('Thread2', 100,))
+    except Exception as e:
+        print("socket error", str(e))
     for msg in consumer:
         print('start playing...')
         print(len(msg), len(msg.value))
