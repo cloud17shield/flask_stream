@@ -18,11 +18,6 @@ consumer = KafkaConsumer(input_topic, group_id='test-consumer-group', bootstrap_
 producer = KafkaProducer(bootstrap_servers='G01-01:9092', compression_type='gzip', batch_size=163840,
                          buffer_memory=33554432, max_request_size=20485760)
 
-server_socket = socket.socket()
-# 绑定socket通信端口
-server_socket.bind(('10.244.1.12', 23333))
-server_socket.listen(0)
-
 app = Flask(__name__)
 
 
@@ -42,6 +37,11 @@ def kafka_stream():
 
 
 def socket_streaming():
+    server_socket = socket.socket()
+    # 绑定socket通信端口
+    server_socket.bind(('10.244.1.12', 23333))
+    server_socket.listen(0)
+
     connection = server_socket.accept()[0].makefile('rb')
     try:
         while True:
@@ -64,8 +64,9 @@ def socket_streaming():
 
 
 if __name__ == '__main__':
-    app.run(host="10.244.1.12", debug=True, port=54321)
+    # app.run(host="10.244.1.12", debug=True, port=54321)
     try:
-        _thread.start_new_thread(socket_streaming(), 1)
+        _thread.start_new_thread(app.run(host="10.244.1.12", debug=True, port=54321), ('Thread1', 100,))
+        _thread.start_new_thread(socket_streaming(), ('Thread2', 100,))
     except Exception as e:
         print("socket error", str(e))
