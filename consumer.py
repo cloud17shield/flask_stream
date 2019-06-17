@@ -24,14 +24,18 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # return a multipart response
-    return Response(kafka_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(con_jou(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+def con_jou():
+    try:
+        _thread.start_new_thread(socket_streaming(), ('Thread1', 100,))
+        _thread.start_new_thread(kafka_stream(), ('Thread2', 100,))
+    except Exception as e:
+        print("socket error", str(e))
 
 
 def kafka_stream():
-    try:
-        _thread.start_new_thread(socket_streaming(), ('Thread2', 100,))
-    except Exception as e:
-        print("socket error", str(e))
     for msg in consumer:
         print('start playing...')
         print(len(msg), len(msg.value))
