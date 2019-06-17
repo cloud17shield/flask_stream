@@ -28,6 +28,7 @@ def index():
 
 
 def kafka_stream():
+    socket_streaming()
     for msg in consumer:
         print('start playing...')
         print(len(msg), len(msg.value))
@@ -36,7 +37,7 @@ def kafka_stream():
                b'Content-Type: image/jpeg\r\n\r\n' + msg.value + b'\r\n\r\n')
 
 
-async def socket_streaming():
+def socket_streaming():
     server_socket = socket.socket()
     # 绑定socket通信端口
     server_socket.bind(('10.244.1.12', 23333))
@@ -67,7 +68,7 @@ async def socket_streaming():
 
 if __name__ == '__main__':
     app.run(host="10.244.1.12", debug=True, port=54321)
-    socket_streaming()
+
     # try:
     #     # _thread.start_new_thread(app.run(host="10.244.1.12", debug=True, port=54321), ('Thread1', 100,))
     #     _thread.start_new_thread(socket_streaming(), ('Thread2', 100,))
