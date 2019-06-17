@@ -25,11 +25,6 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # return a multipart response
-    try:
-        _thread.start_new_thread(socket_streaming(), 1)
-    except Exception as e:
-        print("socket error", str(e))
-
     return Response(kafka_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
@@ -71,3 +66,7 @@ def socket_streaming():
 
 if __name__ == '__main__':
     app.run(host="10.244.1.12", debug=True, port=54321)
+    try:
+        _thread.start_new_thread(socket_streaming(), 1)
+    except Exception as e:
+        print("socket error", str(e))
