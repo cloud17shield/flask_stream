@@ -24,12 +24,14 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # return a multipart response
-    threading.Thread(socket_streaming()).start()
+
     return Response(kafka_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 def kafka_stream():
-
+    p = threading.Thread(socket_streaming())
+    p.daemon = True
+    p.start()
     for msg in consumer:
         print('start playing...')
         print(len(msg), len(msg.value))
