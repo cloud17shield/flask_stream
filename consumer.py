@@ -43,6 +43,7 @@ def kafka_stream():
         print('start playing...')
         print(len(msg), len(msg.value))
         print(type(msg.value))
+        print('key:', msg.key)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + msg.value + b'\r\n\r\n')
 
