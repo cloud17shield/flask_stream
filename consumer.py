@@ -51,7 +51,7 @@ def kafka_stream():
 def socket_streaming():
     server_socket = socket.socket()
     # 绑定socket通信端口
-    server_socket.bind(('10.244.1.12', 23333))
+    server_socket.bind(('10.244.27.7', 23333))
     server_socket.listen(0)
     print("socket establish")
 
@@ -78,4 +78,4 @@ def socket_streaming():
 
 
 if __name__ == '__main__':
-    app.run(host="10.244.1.12", debug=True, port=54321, threaded=True)
+    app.run(host="10.244.27.7", debug=True, port=54321, threaded=True)
