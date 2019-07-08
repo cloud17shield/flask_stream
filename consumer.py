@@ -6,6 +6,9 @@ import io
 from kafka import KafkaProducer
 import time
 import threading
+from PIL import Image
+import numpy
+import cv2
 
 input_topic = 'input'
 output_topic = 'output4'
@@ -69,8 +72,13 @@ def socket_streaming():
             # 读取图片
             image_stream.write(connection.read(image_len))
             image_stream.seek(0)
-            img_buffer = image_stream.getvalue()
-            producer.send(input_topic, value=img_buffer, key=str(int(time.time() * 1000)).encode('utf-8'))
+
+            image = Image.open(image_stream)
+            cv2img = numpy.array(image, dtype=numpy.uint8)[:, :, ::-1]
+
+            # send image stream to kafka
+            print('imgshape', cv2img.shape)
+            producer.send(input_topic, value=cv2.imencode('.jpg', cv2img)[1].tobytes(), key=str(int(time.time() * 1000)).encode('utf-8'))
             producer.flush()
 
     except Exception as e:
