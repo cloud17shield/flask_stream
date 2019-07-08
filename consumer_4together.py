@@ -1,4 +1,5 @@
 from flask import Flask, Response
+from flask import render_template
 from kafka import KafkaConsumer
 import socket
 import struct
