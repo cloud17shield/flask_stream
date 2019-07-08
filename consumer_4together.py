@@ -12,7 +12,7 @@ input_topic = 'input'
 output_topic = 'output'
 # connect to Kafka server and pass the topic we want to consume
 brokers = "G01-01:2181,G01-02:2181,G01-03:2181,G01-04:2181,G01-05:2181,G01-06:2181,G01-07:2181,G01-08:2181," \
-          "G01-09:2181,G01-10:2181,G01-11:2181,G01-12:2181,G01-13:2181,G01-14:2181,G01-15:2181,G01-16:2181 "
+          "G01-09:2181,G01-10:2181,G01-11:2181,G01-12:2181,G01-13:2181,G01-14:2181,G01-15:2181,G01-16:2181"
 
 consumer1 = KafkaConsumer('output1', group_id='test-consumer-group', bootstrap_servers='g01-01:9092')
 consumer2 = KafkaConsumer('output2', group_id='test-consumer-group', bootstrap_servers='g01-01:9092')
@@ -33,12 +33,12 @@ def index():
 
 @app.route('/drunk_detect')
 def drunk_detect():
-    return Response(kafka_stream1(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(kafka_stream2(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @app.route('/drowy_detect')
 def drowy_detect():
-    return Response(kafka_stream2(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(kafka_stream1(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @app.route('/dangerous_object_detect')
