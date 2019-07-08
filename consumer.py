@@ -5,7 +5,6 @@ import struct
 import io
 from kafka import KafkaProducer
 import time
-import threading
 from PIL import Image
 import numpy
 import cv2
@@ -29,16 +28,6 @@ def index():
     # return a multipart response
 
     return Response(kafka_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-class threadClass:
-    def __init__(self):
-        p = threading.Thread(socket_streaming())
-        p.daemon = True
-        p.start()
-
-    def run(self):
-        kafka_stream()
 
 
 def kafka_stream():
@@ -78,7 +67,8 @@ def socket_streaming():
 
             # send image stream to kafka
             print('imgshape', cv2img.shape)
-            producer.send(input_topic, value=cv2.imencode('.jpg', cv2img)[1].tobytes(), key=str(int(time.time() * 1000)).encode('utf-8'))
+            producer.send(input_topic, value=cv2.imencode('.jpg', cv2img)[1].tobytes(),
+                          key=str(int(time.time() * 1000)).encode('utf-8'))
             producer.flush()
 
     except Exception as e:
